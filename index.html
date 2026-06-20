@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dijital Kartvizit</title>
+
+<!-- ============================================================= -->
+<!--  TEK DÜZENLEME ALANI: Aşağıdaki bilgileri kendine göre değiştir -->
+<!-- ============================================================= -->
+<script>
+const KART = {
+  ad:        "Adınız Soyadınız",
+  unvan:     "Dış Ticaret Uzmanı",
+  kurum:     "T.C. Ticaret Bakanlığı",
+  birim:     "Serbest Bölgeler Genel Müdürlüğü",
+  sehir:     "Ankara, Türkiye",
+  telefon:   "+90 5XX XXX XX XX",   // boş bırakırsan o buton görünmez
+  eposta:    "ad.soyad@ticaret.gov.tr",
+  linkedin:  "https://www.linkedin.com/in/kullanici-adin",
+};
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#131722;
+    --slate:#5A6472;
+    --paper:#E7EAEF;
+    --surface:#FCFCFA;
+    --line:#D2D7DE;
+    --stamp:#BE3A2B;
+    --stamp-deep:#9C2D20;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 50% -10%, #F1F3F6 0%, var(--paper) 55%, #DCE0E6 100%);
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:24px 16px;
+  }
+
+  .card{
+    width:100%;max-width:380px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:0 1px 0 rgba(19,23,34,.04), 0 18px 50px -28px rgba(19,23,34,.45);
+    position:relative;
+    overflow:hidden;
+    padding:34px 28px 28px;
+  }
+  /* damga köşesi — resmi belge hissi */
+  .card::before{
+    content:"";position:absolute;top:0;left:0;
+    width:62px;height:62px;
+    background:linear-gradient(135deg,var(--stamp) 0 50%,transparent 50%);
+  }
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--stamp-deep);
+    margin-bottom:20px;
+  }
+
+  .name{
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:700;font-size:31px;line-height:1.05;
+    letter-spacing:-.015em;
+    margin-bottom:7px;
+  }
+  .title{
+    font-size:14.5px;color:var(--slate);font-weight:500;
+    margin-bottom:22px;
+  }
+
+  /* künye şeridi — serbest bölge / belge dünyasına gönderme */
+  .strip{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:14px 0;margin-bottom:24px;
+    display:grid;gap:8px;
+  }
+  .strip div{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;line-height:1.4;color:var(--ink);
+    display:flex;gap:10px;
+  }
+  .strip span{
+    color:var(--slate);min-width:52px;flex-shrink:0;
+    letter-spacing:.04em;
+  }
+
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;border:1px solid var(--ink);
+    background:var(--ink);color:#fff;
+    font-family:"IBM Plex Sans",sans-serif;font-size:15px;font-weight:600;
+    padding:14px;border-radius:3px;cursor:pointer;
+    text-decoration:none;
+    transition:transform .12s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn:active{transform:translateY(0);}
+  .btn.primary{background:var(--stamp);border-color:var(--stamp);}
+  .btn.primary:hover{background:var(--stamp-deep);border-color:var(--stamp-deep);}
+
+  .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;}
+  .mini{
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);border-radius:3px;
+    background:#fff;color:var(--ink);
+    padding:12px 6px;font-size:12.5px;font-weight:500;
+    text-decoration:none;cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .mini:hover{border-color:var(--ink);color:var(--stamp-deep);}
+
+  .qrwrap{
+    margin-top:18px;display:none;
+    text-align:center;
+    border-top:1px dashed var(--line);padding-top:18px;
+  }
+  .qrwrap.open{display:block;animation:fade .25s ease;}
+  #qr{display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:3px;}
+  #qr img,#qr canvas{display:block;}
+  .qrnote{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:10px;color:var(--slate);margin-top:10px;letter-spacing:.05em;
+  }
+
+  .foot{
+    margin-top:22px;text-align:center;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9AA2AD;
+  }
+
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+  .reveal{opacity:0;transform:translateY(8px);animation:up .5s ease forwards;}
+  .reveal:nth-child(2){animation-delay:.05s;}
+  @keyframes up{to{opacity:1;transform:none;}}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{animation:none;opacity:1;transform:none;}
+    .btn:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="eyebrow reveal">Dijital Kartvizit</div>
+    <h1 class="name reveal" id="ad"></h1>
+    <p class="title reveal" id="unvan"></p>
+
+    <div class="strip reveal">
+      <div><span>KURUM</span><b id="kurum"></b></div>
+      <div><span>BİRİM</span><b id="birim"></b></div>
+      <div><span>ŞEHİR</span><b id="sehir"></b></div>
+    </div>
+
+    <button class="btn primary" id="vcardBtn">↓&nbsp; Rehbere Ekle</button>
+
+    <div class="row" id="actions"></div>
+
+    <button class="mini" id="qrBtn" style="width:100%;margin-top:10px;">QR Göster</button>
+
+    <div class="qrwrap" id="qrwrap">
+      <div id="qr"></div>
+      <div class="qrnote">Bu kartın bağlantısını taratın</div>
+    </div>
+
+    <div class="foot">kişisel · iletişim kartı</div>
+  </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // --- içerik doldur ---
+  const $ = id => document.getElementById(id);
+  $("ad").textContent     = KART.ad;
+  $("unvan").textContent  = KART.unvan;
+  $("kurum").textContent  = KART.kurum;
+  $("birim").textContent  = KART.birim;
+  $("sehir").textContent  = KART.sehir;
+
+  // --- aksiyon butonları (sadece dolu olanlar) ---
+  const act = $("actions");
+  const items = [
+    KART.telefon && {t:"Ara",  href:"tel:"+KART.telefon.replace(/\s/g,"")},
+    KART.eposta  && {t:"E-posta", href:"mailto:"+KART.eposta},
+    KART.linkedin&& {t:"LinkedIn", href:KART.linkedin, ext:true},
+  ].filter(Boolean);
+  act.style.gridTemplateColumns = `repeat(${items.length},1fr)`;
+  items.forEach(i=>{
+    const a=document.createElement("a");
+    a.className="mini";a.textContent=i.t;a.href=i.href;
+    if(i.ext){a.target="_blank";a.rel="noopener";}
+    act.appendChild(a);
+  });
+
+  // --- vCard (.vcf) üret ve indir ---
+  $("vcardBtn").addEventListener("click",()=>{
+    const [adi,...soy]=KART.ad.trim().split(" ");
+    const v=[
+      "BEGIN:VCARD","VERSION:3.0",
+      `N:${soy.join(" ")};${adi};;;`,
+      `FN:${KART.ad}`,
+      `ORG:${KART.kurum};${KART.birim}`,
+      `TITLE:${KART.unvan}`,
+      KART.telefon && `TEL;TYPE=CELL:${KART.telefon}`,
+      KART.eposta  && `EMAIL;TYPE=WORK:${KART.eposta}`,
+      KART.linkedin&& `URL:${KART.linkedin}`,
+      `ADR;TYPE=WORK:;;;${KART.sehir};;;`,
+      "END:VCARD",
+    ].filter(Boolean).join("\r\n");
+    const url=URL.createObjectURL(new Blob([v],{type:"text/vcard"}));
+    const a=document.createElement("a");
+    a.href=url;a.download=(KART.ad||"kartvizit")+".vcf";
+    document.body.appendChild(a);a.click();a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // --- QR (bu sayfanın URL'sini taşır) ---
+  let qrDone=false;
+  $("qrBtn").addEventListener("click",()=>{
+    const w=$("qrwrap");
+    w.classList.toggle("open");
+    $("qrBtn").textContent = w.classList.contains("open") ? "QR Gizle" : "QR Göster";
+    if(!qrDone && w.classList.contains("open")){
+      new QRCode($("qr"),{
+        text:location.href,
+        width:168,height:168,
+        colorDark:"#131722",colorLight:"#ffffff",
+        correctLevel:QRCode.CorrectLevel.M
+      });
+      qrDone=true;
+    }
+  });
+</script>
+</body>
+</html>
