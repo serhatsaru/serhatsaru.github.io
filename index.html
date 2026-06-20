@@ -16,14 +16,14 @@ const KART = {
   tr: {
     ad:    "R. Serhat SARU",
     unvan: "(Dış) Ticaret Uzmanı",
-    kurum: "Türkiye Cumhuriyeti Ticaret Bakanlığı",
+    kurum: "Ticaret Bakanlığı",
     birim: "Serbest Bölgeler Genel Müdürlüğü",
     sehir: "Ankara, Türkiye",
   },
   en: {
     ad:    "R. Serhat SARU",
     unvan: "(Foreign) Trade Expert",
-    kurum: "Ministry of Trade Rep. of Türkiye",
+    kurum: "Ministry of Trade",
     birim: "General Directorate of Free Zones",
     sehir: "Ankara, Türkiye",
   },
@@ -122,12 +122,13 @@ const LOGO = {
   }
   .mini:hover{border-color:var(--red);color:var(--red);}
 
-  .qrwrap{margin-top:18px;display:none;border-top:1px dashed var(--line);padding-top:18px;}
-  .qrwrap.open{display:block;animation:fade .25s ease;}
+  .qrwrap{margin-top:20px;border-top:1px dashed var(--line);padding-top:18px;text-align:center;}
   #qr{display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:4px;}
   #qr img,#qr canvas{display:block;}
   .qrnote{font-size:10.5px;color:var(--ink);margin-top:10px;letter-spacing:.04em;}
 
+  .web{display:inline-block;margin-top:18px;font-size:12px;font-weight:600;letter-spacing:.05em;color:var(--red);text-decoration:none;}
+  .web:hover{text-decoration:underline;}
   .foot{
     margin-top:20px;font-size:10px;font-weight:600;letter-spacing:.16em;
     text-transform:uppercase;color:var(--line);
@@ -156,13 +157,13 @@ const LOGO = {
 
     <button class="btn" id="vcardBtn">&#8595;&nbsp; <span id="addLbl"></span></button>
     <div class="row" id="actions"></div>
-    <button class="mini" id="qrBtn" style="margin-top:9px;"></button>
 
     <div class="qrwrap" id="qrwrap">
       <div id="qr"></div>
       <div class="qrnote" id="qrNote"></div>
     </div>
 
+    <a class="web" href="https://www.ticaret.gov.tr" target="_blank" rel="noopener">www.ticaret.gov.tr</a>
     <div class="foot" id="foot"></div>
   </main>
 
@@ -184,7 +185,6 @@ const LOGO = {
     $("addLbl").textContent=u.add;
     $("foot").textContent=u.foot;
     $("qrNote").textContent=u.qrNote;
-    $("qrBtn").textContent=qrOpen?u.qrHide:u.qrShow;
 
     const items=[
       KART.telefon  && {t:u.call,     href:"tel:"+KART.telefon.replace(/\s/g,"")},
@@ -218,6 +218,7 @@ const LOGO = {
       KART.telefon  && `TEL;TYPE=CELL:${KART.telefon}`,
       KART.eposta   && `EMAIL;TYPE=WORK:${KART.eposta}`,
       KART.linkedin && `URL:${KART.linkedin}`,
+      `URL:https://www.ticaret.gov.tr`,
       `ADR;TYPE=WORK:;;;${d.sehir};;;`,
       "END:VCARD",
     ].filter(Boolean).join("\r\n");
@@ -226,17 +227,10 @@ const LOGO = {
     a.href=url;a.download=d.ad.replace(/\s+/g,"_")+".vcf";
     document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
   });
-  $("qrBtn").addEventListener("click",()=>{
-    const w=$("qrwrap"); qrOpen=!qrOpen;
-    w.classList.toggle("open",qrOpen);
-    $("qrBtn").textContent=qrOpen?UI[lang].qrHide:UI[lang].qrShow;
-    if(!qrDone && qrOpen){
-      new QRCode($("qr"),{text:location.href,width:168,height:168,
-        colorDark:"#3A3D42",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
-      qrDone=true;
-    }
-  });
   render();
+  // kalici QR - sayfa yuklenince bir kez cizilir
+  new QRCode($("qr"),{text:location.href,width:168,height:168,
+    colorDark:"#3A3D42",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
 </script>
 </body>
 </html>
