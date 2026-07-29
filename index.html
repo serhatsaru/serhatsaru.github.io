@@ -10,7 +10,8 @@
 <!-- ============================================================= -->
 <script>
 const KART = {
-  telefon:  "+90 544 496 06 03",
+  telefonOfis: "+55 11 3065 0300",
+  telefonCep:  "+90 544 496 06 03",
   eposta:   "saopaulo@trade.gov.tr",
   web:      "www.trade.gov.tr",
   linkedin: "https://www.linkedin.com/in/recep-serhat-saru-90234428/",
@@ -35,13 +36,13 @@ const KART = {
   },
 };
 const UI = {
-  tr:{ add:"Rehbere Ekle", call:"Ara", email:"E-posta", linkedin:"LinkedIn",
+  tr:{ add:"Rehbere Ekle", callOfis:"Ofis", callCep:"Cep", email:"E-posta", linkedin:"LinkedIn",
        qrNote:"Bu kartın bağlantısını taratarak paylaşabilirsiniz",
        foot:"kişisel · iletişim kartı", LA:"ADRES" },
-  en:{ add:"Add to Contacts", call:"Call", email:"Email", linkedin:"LinkedIn",
+  en:{ add:"Add to Contacts", callOfis:"Office", callCep:"Mobile", email:"Email", linkedin:"LinkedIn",
        qrNote:"Scan the link of this card to share it",
        foot:"personal · contact card", LA:"ADDRESS" },
-  pt:{ add:"Adicionar aos Contatos", call:"Ligar", email:"E-mail", linkedin:"LinkedIn",
+  pt:{ add:"Adicionar aos Contatos", callOfis:"Fixo", callCep:"Celular", email:"E-mail", linkedin:"LinkedIn",
        qrNote:"Escaneie o link deste cartão para compartilhá-lo",
        foot:"cartão de contato pessoal", LA:"ENDEREÇO" },
 };
@@ -122,7 +123,8 @@ const UI = {
   .mini{
     display:flex;align-items:center;justify-content:center;
     border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink-strong);
-    padding:11px 6px;font-size:12.5px;font-weight:600;text-decoration:none;cursor:pointer;
+    padding:11px 4px;font-size:12px;font-weight:600;text-decoration:none;cursor:pointer;
+    white-space:nowrap;
     transition:border-color .15s ease, color .15s ease;
   }
   .mini:hover{border-color:var(--gold);color:var(--gold-deep);}
@@ -202,7 +204,8 @@ const UI = {
     const w=$("webLink"); w.textContent=KART.web; w.href="https://"+KART.web.replace(/^https?:\/\//,"");
 
     const items=[
-      KART.telefon  && {t:u.call,     href:"tel:"+KART.telefon.replace(/\s/g,"")},
+      KART.telefonOfis && {t:u.callOfis, href:"tel:"+KART.telefonOfis.replace(/\s/g,"")},
+      KART.telefonCep  && {t:u.callCep,  href:"tel:"+KART.telefonCep.replace(/\s/g,"")},
       KART.eposta   && {t:u.email,    href:"mailto:"+KART.eposta},
       KART.linkedin && {t:u.linkedin, href:KART.linkedin, ext:true},
     ].filter(Boolean);
@@ -231,7 +234,8 @@ const UI = {
       `FN:${esc(d.ad)}`,
       `ORG:${esc(d.kurum)};${esc(d.birim)}`,
       `TITLE:${esc(d.unvan)}`,
-      KART.telefon  && `TEL;TYPE=WORK:${KART.telefon}`,
+      KART.telefonOfis && `TEL;TYPE=WORK,VOICE:${KART.telefonOfis}`,
+      KART.telefonCep  && `TEL;TYPE=CELL,WORK:${KART.telefonCep}`,
       KART.eposta   && `EMAIL;TYPE=WORK:${KART.eposta}`,
       KART.linkedin && `URL:${KART.linkedin}`,
       KART.web      && `URL:https://${KART.web.replace(/^https?:\/\//,"")}`,
