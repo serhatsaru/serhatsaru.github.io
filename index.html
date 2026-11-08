@@ -3,19 +3,39 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dijital Kartvizit | Digital Business Card | Cartão de Visita</title>
+<title>Recep Serhat SARU · Trade Attaché · Ticaret Ataşesi · Adido Comercial</title>
+<meta name="description" content="Recep Serhat SARU – Trade Attaché, Consulate General of Türkiye in São Paulo. Contact card / İletişim kartı / Cartão de contato." />
+<meta name="theme-color" content="#2E3033" />
+<meta property="og:type" content="profile" />
+<meta property="og:title" content="Recep Serhat SARU – Trade Attaché" />
+<meta property="og:description" content="Consulate General of Türkiye in São Paulo · Trade Attaché Office" />
+<meta property="og:url" content="https://serhatsaru.github.io/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232E3033'/%3E%3Ccircle cx='27' cy='32' r='17' fill='%23C8992E'/%3E%3Ccircle cx='32.5' cy='32' r='13.5' fill='%232E3033'/%3E%3Cpolygon fill='%23C8992E' points='37,32 42.5,30 42.8,24 46.5,28.8 52,27.2 48.8,32 52,36.8 46.5,35.2 42.8,40 42.5,34'/%3E%3C/svg%3E" />
 
 <!-- ============================================================= -->
 <!--  TEK DUZENLEME ALANI                                           -->
+<!--  Bir alanı boş bırakırsanız ("") ilgili buton/satır gizlenir.  -->
 <!-- ============================================================= -->
 <script>
 const KART = {
   telefonOfis: "+55 11 3065 0300",
+  dahili:      "307",                 // ofis aranınca otomatik tuşlanır
   telefonCep:  "+55 11 92058 4455",
-  eposta:   "saopaulo@trade.gov.tr",
-  web:      "www.trade.gov.tr",
+  whatsapp:    "+55 11 92058 4455",   // cep ile aynıysa rehberde cep "WhatsApp" etiketiyle kaydedilir
+  ipTel:       ["+90 312 204 83 30", "+90 312 204 83 31"],  // yalnız rehber kaydına girer
+  eposta:      "sarus@ticaret.gov.tr",
+  epostaOfis:  "saopaulo@ticaret.gov.tr",
+  kep:         "tb.saopauloticaretataseligi@hs03.kep.tr",   // yalnız TR dilinde gösterilir
+  web: { tr:"www.ticaret.gov.tr", en:"www.trade.gov.tr", pt:"www.trade.gov.tr" },  // TR sayfa / EN sayfa
   linkedin: "https://www.linkedin.com/in/recep-serhat-saru-90234428/",
-  adres: "Av. Chedid Jafet, 222, Bloco A, Conj. 42 · Vila Olímpia - São Paulo · 04551-065 SP, BRASIL",
+  adres: {
+    sokak: "Av. Chedid Jafet, 222, Bloco A, Conj. 42",
+    semt:  "Vila Olímpia",
+    sehir: "São Paulo",
+    eyalet:"SP",
+    posta: "04551-065",
+    ulke:  "BRASIL",
+  },
   tr: {
     ad:    "Recep Serhat SARU",
     unvan: "Ticaret Ataşesi",
@@ -31,20 +51,26 @@ const KART = {
   pt: {
     ad:    "Recep Serhat SARU",
     unvan: "Adido Comercial",
-    kurum: "Consulado-Geral da Türkiye em São Paulo",
+    kurum: "Consulado-Geral da Turquia em São Paulo",
     birim: "Escritório Comercial",
   },
 };
 const UI = {
-  tr:{ add:"Rehbere Ekle", callOfis:"Ofis", callCep:"Cep", email:"E-posta", linkedin:"LinkedIn",
-       qrNote:"Bu kartın bağlantısını taratarak paylaşabilirsiniz",
-       foot:"kişisel · iletişim kartı", LA:"ADRES" },
-  en:{ add:"Add to Contacts", callOfis:"Office", callCep:"Mobile", email:"Email", linkedin:"LinkedIn",
-       qrNote:"Scan the link of this card to share it",
-       foot:"personal · contact card", LA:"ADDRESS" },
-  pt:{ add:"Adicionar aos Contatos", callOfis:"Fixo", callCep:"Celular", email:"E-mail", linkedin:"LinkedIn",
-       qrNote:"Escaneie o link deste cartão para compartilhá-lo",
-       foot:"cartão de contato pessoal", LA:"ENDEREÇO" },
+  tr:{ add:"Rehbere Ekle", callOfis:"Ofis", callCep:"Cep", whatsapp:"WhatsApp", email:"E-posta", linkedin:"LinkedIn",
+       qrNote:"Bu kartı açmak için kodu taratın", share:"Bağlantıyı paylaş", copied:"Bağlantı kopyalandı",
+       map:"Haritada aç", foot:"kişisel · iletişim kartı", LA:"ADRES", langs:"Dil seçimi",
+       LT:"TELEFON", LC:"CEP", LE:"E-POSTA", LO:"OFİS", LK:"KEP", ext:"Dahili", ipLbl:"IP Tel", ofisLbl:"Ofis",
+       waMsg:"Merhaba, dijital kartvizitiniz aracılığıyla ulaşıyorum." },
+  en:{ add:"Add to Contacts", callOfis:"Office", callCep:"Mobile", whatsapp:"WhatsApp", email:"Email", linkedin:"LinkedIn",
+       qrNote:"Scan to open this card", share:"Share link", copied:"Link copied",
+       map:"Open in maps", foot:"personal · contact card", LA:"ADDRESS", langs:"Language",
+       LT:"PHONE", LC:"MOBILE", LE:"EMAIL", LO:"OFFICE", ext:"Ext.", ipLbl:"IP Phone", ofisLbl:"Office",
+       waMsg:"Hello, I am reaching out via your digital business card." },
+  pt:{ add:"Adicionar aos Contatos", callOfis:"Fixo", callCep:"Celular", whatsapp:"WhatsApp", email:"E-mail", linkedin:"LinkedIn",
+       qrNote:"Escaneie para abrir este cartão", share:"Compartilhar link", copied:"Link copiado",
+       map:"Abrir no mapa", foot:"cartão de contato pessoal", LA:"ENDEREÇO", langs:"Idioma",
+       LT:"TELEFONE", LC:"CELULAR", LE:"E-MAIL", LO:"ESCRITÓRIO", ext:"Ramal", ipLbl:"IP Tel", ofisLbl:"Escritório",
+       waMsg:"Olá, entro em contato por meio do seu cartão de visita digital." },
 };
 </script>
 
@@ -55,14 +81,14 @@ const UI = {
 <style>
   :root{
     --gold:#C8992E; --gold-deep:#A87E1E;
-    --ink:#53565A; --ink-strong:#2E3033;
+    --ink:#53565A; --ink-strong:#2E3033; --ink-soft:#707377;
     --line:#D2D3D1; --surface:#FFFFFF;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{height:100%;}
   body{
     font-family:"Source Sans 3",system-ui,sans-serif;color:var(--ink);
-    background:radial-gradient(120% 80% at 50% -10%, #F6F6F5 0%, #EBEBEA 60%, #DAD9D6 100%);
+    background:#EBEBEA radial-gradient(120% 80% at 50% -10%, #F6F6F5 0%, #EBEBEA 60%, #DAD9D6 100%);
     min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;
   }
   .card{
@@ -78,13 +104,14 @@ const UI = {
   }
   .lang button{
     border:0;background:transparent;color:var(--ink);
-    padding:5px 10px;cursor:pointer;font:inherit;font-weight:600;letter-spacing:.03em;
+    padding:6px 11px;cursor:pointer;font:inherit;font-weight:600;letter-spacing:.03em;
     transition:background .15s ease,color .15s ease;
   }
   .lang button + button{border-left:1px solid var(--line);}
-  .lang button.active{background:var(--ink-strong);color:#fff;}
+  .lang button[aria-pressed="true"]{background:var(--ink-strong);color:#fff;}
 
   .logo{width:104px;height:80px;display:block;margin:12px auto 20px;}
+  .logo .fill{fill:var(--gold);}
 
   .name{
     font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:28px;
@@ -100,14 +127,22 @@ const UI = {
   .org b{display:block;font-size:13px;font-weight:600;color:var(--ink-strong);line-height:1.35;}
   .org span{display:block;font-size:12.5px;color:var(--gold-deep);font-weight:600;margin-top:2px;}
 
-  .addr{
-    display:flex;gap:12px;text-align:left;font-size:12px;line-height:1.4;
-    color:var(--ink-strong);border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;
+  .info{
+    text-align:left;font-size:12px;line-height:1.4;color:var(--ink-strong);
+    border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;
+    display:grid;gap:8px;
   }
-  .addr i{
-    font-style:normal;color:var(--gold-deep);min-width:58px;flex-shrink:0;font-weight:600;
+  .irow{display:flex;gap:12px;}
+  .irow i{
+    font-style:normal;color:var(--gold-deep);width:76px;flex-shrink:0;font-weight:600;
     font-size:10.5px;letter-spacing:.08em;padding-top:1px;
   }
+  .irow > :last-child{min-width:0;overflow-wrap:anywhere;}
+  .info a{color:inherit;text-decoration:none;}
+  .info a:hover{color:var(--gold-deep);}
+  .info a:hover .maplbl,.info a:focus-visible .maplbl{text-decoration:underline;}
+  .info small{font-size:11px;color:var(--ink);}
+  .maplbl{display:block;margin-top:3px;font-size:11px;font-weight:600;color:var(--gold-deep);}
 
   .btn{
     display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
@@ -119,8 +154,9 @@ const UI = {
   .btn:hover{transform:translateY(-1px);opacity:.92;}
   .btn:active{transform:translateY(0);}
 
-  .row{display:grid;gap:8px;margin-top:9px;}
+  .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px;}
   .mini{
+    flex:1 1 84px;
     display:flex;align-items:center;justify-content:center;
     border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink-strong);
     padding:11px 4px;font-size:12px;font-weight:600;text-decoration:none;cursor:pointer;
@@ -129,37 +165,49 @@ const UI = {
   }
   .mini:hover{border-color:var(--gold);color:var(--gold-deep);}
 
+  a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
   .qrwrap{margin-top:20px;border-top:1px dashed var(--line);padding-top:18px;text-align:center;}
   #qr{display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:4px;}
   #qr img,#qr canvas{display:block;}
-  .qrnote{font-size:10.5px;color:var(--ink);margin-top:10px;letter-spacing:.04em;}
+  .qrnote{font-size:11px;color:var(--ink);margin-top:10px;letter-spacing:.04em;}
+  .share{
+    margin-top:10px;border:1px solid var(--line);background:#fff;color:var(--ink-strong);
+    font:inherit;font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer;
+  }
+  .share:hover{border-color:var(--gold);color:var(--gold-deep);}
 
   .web{display:inline-block;margin-top:18px;font-size:12px;font-weight:600;letter-spacing:.05em;color:var(--gold-deep);text-decoration:none;}
   .web:hover{text-decoration:underline;}
   .foot{
     margin-top:18px;font-size:10px;font-weight:600;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--line);
+    text-transform:uppercase;color:var(--ink-soft);
   }
+  @media (max-width:360px){ .card{padding:26px 18px 22px;} .name{font-size:25px;} }
   @media (prefers-reduced-motion:reduce){.btn:hover{transform:none;}}
+  @media print{
+    body{background:#fff;padding:0;} .card{box-shadow:none;}
+    .lang,.share,#vcardBtn{display:none;}
+  }
 </style>
 </head>
 <body>
   <main class="card">
-    <div class="lang">
-      <button id="btnTr" onclick="setLang('tr')">TR</button>
-      <button id="btnEn" class="active" onclick="setLang('en')">EN</button>
-      <button id="btnPt" onclick="setLang('pt')">PT</button>
+    <div class="lang" role="group" id="langGroup" aria-label="Language">
+      <button type="button" data-lang="tr" lang="tr" aria-pressed="false">TR</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="pt" lang="pt" aria-pressed="false">PT</button>
     </div>
 
     <svg class="logo" viewBox="0 0 210 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Türkiye">
-  <defs><mask id="cres">
-    <rect width="210" height="160" fill="#000"/>
-    <circle cx="72" cy="80" r="54" fill="#fff"/>
-    <circle cx="90" cy="80" r="43" fill="#000"/>
-  </mask></defs>
-  <rect width="210" height="160" fill="var(--gold)" mask="url(#cres)"/>
-  <polygon fill="var(--gold)" points="105.0,80.0 122.9,73.4 123.7,54.3 135.5,69.3 153.8,64.1 143.3,80.0 153.8,95.9 135.5,90.7 123.7,105.7 122.9,86.6"/>
-</svg>
+      <defs><mask id="cres">
+        <rect width="210" height="160" fill="#000"/>
+        <circle cx="72" cy="80" r="54" fill="#fff"/>
+        <circle cx="90" cy="80" r="43" fill="#000"/>
+      </mask></defs>
+      <rect class="fill" width="210" height="160" mask="url(#cres)"/>
+      <polygon class="fill" points="105.0,80.0 122.9,73.4 123.7,54.3 135.5,69.3 153.8,64.1 143.3,80.0 153.8,95.9 135.5,90.7 123.7,105.7 122.9,86.6"/>
+    </svg>
 
     <h1 class="name" id="ad"></h1>
     <p class="title" id="unvan"></p>
@@ -169,16 +217,15 @@ const UI = {
       <span id="birim"></span>
     </div>
 
-    <div class="addr">
-      <i id="la"></i><span id="adres"></span>
-    </div>
+    <div class="info" id="info"></div>
 
-    <button class="btn" id="vcardBtn">&#8595;&nbsp; <span id="addLbl"></span></button>
+    <button type="button" class="btn" id="vcardBtn"><span aria-hidden="true">&#8595;</span> <span id="addLbl"></span></button>
     <div class="row" id="actions"></div>
 
     <div class="qrwrap" id="qrwrap">
       <div id="qr"></div>
       <div class="qrnote" id="qrNote"></div>
+      <button type="button" class="share" id="shareBtn"></button>
     </div>
 
     <a class="web" id="webLink" target="_blank" rel="noopener"></a>
@@ -188,7 +235,29 @@ const UI = {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
   const $ = id => document.getElementById(id);
-  let lang="en";
+  const LANGS = ["tr","en","pt"];
+  const A = KART.adres;
+  const adresMetni = [A.sokak, [A.semt, A.sehir].filter(Boolean).join(" - "), [A.posta.replace("-","\u2011"), A.eyalet].filter(Boolean).join(" ") + (A.ulke ? ", " + A.ulke : "")].filter(Boolean).join(" · ");
+  const digits = s => String(s).replace(/[^\d+]/g,"");
+  const webOf = l => (KART.web && KART.web[l]) || "";
+  const webUrl = l => webOf(l) ? "https://" + webOf(l).replace(/^https?:\/\//,"") : "";
+  const baseUrl = location.origin + location.pathname;
+  // Virgül = kısa bekleme; telefon dahiliyi kendisi tuşlar
+  const ofisTel = digits(KART.telefonOfis) + (KART.dahili ? "," + KART.dahili : "");
+  const waAyni = KART.whatsapp && KART.telefonCep && digits(KART.whatsapp) === digits(KART.telefonCep);
+
+  // Dil önceliği: ?lang= parametresi > son seçim > tarayıcı dili > EN
+  function initialLang(){
+    const p = new URLSearchParams(location.search).get("lang");
+    if (LANGS.includes(p)) return p;
+    try { const s = localStorage.getItem("kartLang"); if (LANGS.includes(s)) return s; } catch(e){}
+    const nav = (navigator.languages || [navigator.language || ""]).map(x => String(x).slice(0,2).toLowerCase());
+    return nav.find(x => LANGS.includes(x)) || "en";
+  }
+  let lang = initialLang();
+  let qr = null, shareTimer = null;
+
+  function cardUrl(){ return baseUrl + "?lang=" + lang; }
 
   function render(){
     const d=KART[lang], u=UI[lang];
@@ -197,67 +266,125 @@ const UI = {
     $("unvan").textContent=d.unvan;
     $("kurum").textContent=d.kurum;
     $("birim").textContent=d.birim;
-    $("la").textContent=u.LA; $("adres").textContent=KART.adres;
+    renderInfo(u);
     $("addLbl").textContent=u.add;
     $("foot").textContent=u.foot;
     $("qrNote").textContent=u.qrNote;
-    const w=$("webLink"); w.textContent=KART.web; w.href="https://"+KART.web.replace(/^https?:\/\//,"");
+    $("shareBtn").textContent=u.share;
+    $("langGroup").setAttribute("aria-label", u.langs);
+    const w=$("webLink"); w.textContent=webOf(lang); w.href=webUrl(lang); w.hidden=!webOf(lang);
 
     const items=[
-      KART.telefonOfis && {t:u.callOfis, href:"tel:"+KART.telefonOfis.replace(/\s/g,"")},
-      KART.telefonCep  && {t:u.callCep,  href:"tel:"+KART.telefonCep.replace(/\s/g,"")},
-      KART.eposta   && {t:u.email,    href:"mailto:"+KART.eposta},
-      KART.linkedin && {t:u.linkedin, href:KART.linkedin, ext:true},
+      KART.telefonOfis && {t:u.callOfis, href:"tel:"+ofisTel},
+      KART.telefonCep  && {t:u.callCep,  href:"tel:"+digits(KART.telefonCep)},
+      KART.whatsapp    && {t:u.whatsapp, href:"https://wa.me/"+digits(KART.whatsapp).replace("+","")+"?text="+encodeURIComponent(u.waMsg), ext:true},
+      KART.eposta      && {t:u.email,    href:"mailto:"+KART.eposta},
+      KART.linkedin    && {t:u.linkedin, href:KART.linkedin, ext:true},
     ].filter(Boolean);
     const act=$("actions"); act.innerHTML="";
-    act.style.gridTemplateColumns=`repeat(${items.length},1fr)`;
     items.forEach(i=>{
       const a=document.createElement("a");
       a.className="mini";a.textContent=i.t;a.href=i.href;
       if(i.ext){a.target="_blank";a.rel="noopener";}
       act.appendChild(a);
     });
+
+    document.querySelectorAll("#langGroup button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.lang===lang)));
+    drawQR();
   }
+
+  // Görünür iletişim satırları (etiket + bağlantı)
+  function renderInfo(u){
+    const box=$("info"); box.innerHTML="";
+    const row=(label, href, text, note, ext)=>{
+      const r=document.createElement("div"); r.className="irow";
+      const i=document.createElement("i"); i.textContent=label; r.appendChild(i);
+      const a=document.createElement("a"); a.href=href;
+      if(ext){a.target="_blank";a.rel="noopener";}
+      const s=document.createElement("span"); s.textContent=text; a.appendChild(s);
+      if(note){ a.appendChild(document.createTextNode(" ")); const sm=document.createElement("small"); sm.textContent=note; a.appendChild(sm); }
+      r.appendChild(a); box.appendChild(r); return a;
+    };
+    const ad=row(u.LA, "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent([A.sokak,A.semt,A.sehir,A.eyalet,A.posta,"Brasil"].filter(Boolean).join(", ")), adresMetni, "", true);
+    const m=document.createElement("span"); m.className="maplbl"; m.textContent=u.map+" ↗"; ad.appendChild(m);
+    if(KART.telefonOfis) row(u.LT, "tel:"+ofisTel, KART.telefonOfis, KART.dahili ? "("+u.ext+" "+KART.dahili+")" : "");
+    if(KART.telefonCep)  row(u.LC, "tel:"+digits(KART.telefonCep), KART.telefonCep, waAyni ? "· WhatsApp" : "");
+    if(KART.eposta)      row(u.LE, "mailto:"+KART.eposta, KART.eposta);
+    if(KART.epostaOfis)  row(u.LO, "mailto:"+KART.epostaOfis, KART.epostaOfis);
+    if(KART.kep && lang==="tr") row(u.LK, "mailto:"+KART.kep, KART.kep);
+  }
+
+  function drawQR(){
+    if (typeof QRCode === "undefined") { $("qr").hidden = true; return; }
+    if (!qr) {
+      qr = new QRCode($("qr"),{text:cardUrl(),width:168,height:168,
+        colorDark:"#2E3033",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
+    } else { qr.clear(); qr.makeCode(cardUrl()); }
+  }
+
   function setLang(l){
+    if (!LANGS.includes(l)) return;
     lang=l;
-    ["Tr","En","Pt"].forEach(x=>$("btn"+x).classList.toggle("active", x.toLowerCase()===l));
+    try { localStorage.setItem("kartLang", l); } catch(e){}
+    try { history.replaceState(null, "", "?lang="+l + location.hash); } catch(e){}
     render();
   }
+  document.querySelectorAll("#langGroup button").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
+
+  $("shareBtn").addEventListener("click", async ()=>{
+    const d=KART[lang], url=cardUrl();
+    if (navigator.share) {
+      try { await navigator.share({title:d.ad + " – " + d.unvan, url}); return; }
+      catch(e){ if (e && e.name === "AbortError") return; }
+    }
+    try { await navigator.clipboard.writeText(url); }
+    catch(e){ window.prompt(UI[lang].share, url); return; }
+    const b=$("shareBtn"); b.textContent=UI[lang].copied;
+    clearTimeout(shareTimer); shareTimer=setTimeout(()=>{ b.textContent=UI[lang].share; },2000);
+  });
+
   $("vcardBtn").addEventListener("click",()=>{
-    const d=KART[lang];
-    const parts=d.ad.trim().split(" ");
+    const d=KART[lang], u=UI[lang];
+    let g=0; const item=()=>"item"+(++g)+".";   // iPhone özel etiketleri için grup öneki
+    const etiketli=(prop,label)=>{ const p=item(); return [p+prop, p+"X-ABLabel:"+label]; };
+    const parts=d.ad.trim().split(/\s+/);
     const family=parts.pop(); const given=parts.join(" ");
-    const esc = s => String(s).replace(/([,;\\])/g,"\\$1");
+    const esc = s => String(s).replace(/([,;\\])/g,"\\$1").replace(/\r?\n/g,"\\n");
     const v=[
       "BEGIN:VCARD","VERSION:3.0",
       `N:${esc(family)};${esc(given)};;;`,
       `FN:${esc(d.ad)}`,
       `ORG:${esc(d.kurum)};${esc(d.birim)}`,
       `TITLE:${esc(d.unvan)}`,
-      KART.telefonOfis && `TEL;TYPE=WORK,VOICE:${KART.telefonOfis}`,
-      KART.telefonCep  && `TEL;TYPE=CELL,WORK:${KART.telefonCep}`,
-      KART.eposta   && `EMAIL;TYPE=WORK:${KART.eposta}`,
-      KART.linkedin && `URL:${KART.linkedin}`,
-      KART.web      && `URL:https://${KART.web.replace(/^https?:\/\//,"")}`,
-      `ADR;TYPE=WORK:;;${esc(KART.adres)};;;;`,
+      KART.telefonOfis && `TEL;TYPE=WORK,VOICE:${ofisTel}`,
+      ...(KART.telefonCep ? (waAyni ? etiketli(`TEL;TYPE=CELL,VOICE:${digits(KART.telefonCep)}`,"WhatsApp")
+                                     : [`TEL;TYPE=CELL,VOICE:${digits(KART.telefonCep)}`]) : []),
+      ...(KART.whatsapp && !waAyni ? etiketli(`TEL;TYPE=CELL:${digits(KART.whatsapp)}`,"WhatsApp") : []),
+      ...(KART.ipTel||[]).flatMap(t=>etiketli(`TEL;TYPE=WORK:${digits(t)}`, u.ipLbl)),
+      KART.eposta   && `EMAIL;TYPE=INTERNET,WORK,PREF:${KART.eposta}`,
+      ...(KART.epostaOfis ? etiketli(`EMAIL;TYPE=INTERNET,WORK:${KART.epostaOfis}`, u.ofisLbl) : []),
+      ...(KART.kep && lang==="tr" ? etiketli(`EMAIL;TYPE=INTERNET:${KART.kep}`, "KEP") : []),
+      webUrl(lang)  && `URL;TYPE=WORK:${webUrl(lang)}`,
+      KART.linkedin && `URL;TYPE=LinkedIn:${KART.linkedin}`,
+      `ADR;TYPE=WORK:;;${esc([A.sokak,A.semt].filter(Boolean).join(" - "))};${esc(A.sehir)};${esc(A.eyalet)};${esc(A.posta)};${esc(A.ulke)}`,
       "END:VCARD",
-    ].filter(Boolean).join("\r\n");
-    const url=URL.createObjectURL(new Blob([v],{type:"text/vcard"}));
+    ].filter(Boolean).join("\r\n") + "\r\n";
+    const url=URL.createObjectURL(new Blob([v],{type:"text/vcard;charset=utf-8"}));
     const a=document.createElement("a");
     a.href=url;a.download=d.ad.replace(/\s+/g,"_")+".vcf";
-    document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1500);
   });
+
   render();
-  new QRCode($("qr"),{text:location.href,width:168,height:168,
-    colorDark:"#2E3033",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
 </script>
 
 <!-- =============================================================
-   ANALITIK (cerezsiz) - GoatCounter. Hesap acip kodunu al,
-   KULLANICIADI'yi degistir, asagidaki iki satirin yorumunu kaldir:
+   ANALITIK (cerezsiz) - GoatCounter. Kullanmak icin asagidaki
+   iki satirin yorumunu kaldirin:
    =============================================================
 <script data-goatcounter="https://serhatsaru.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+        async src="https://gc.zgo.at/count.js"></script>
 -->
 </body>
 </html>
