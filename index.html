@@ -19,9 +19,13 @@
 <script>
 const KART = {
   telefonOfis: "+55 11 3065 0300",
+  dahili:      "307",                 // ofis aranınca otomatik tuşlanır
   telefonCep:  "+55 11 92058 4455",
-  whatsapp:    "+55 11 92058 4455",
-  eposta:   "saopaulo@trade.gov.tr",
+  whatsapp:    "+55 11 92058 4455",   // cep ile aynıysa rehberde cep "WhatsApp" etiketiyle kaydedilir
+  ipTel:       ["+90 312 204 83 30", "+90 312 204 83 31"],  // yalnız rehber kaydına girer
+  eposta:      "sarus@ticaret.gov.tr",
+  epostaOfis:  "saopaulo@ticaret.gov.tr",
+  kep:         "tb.saopauloticaretataseligi@hs03.kep.tr",   // yalnız TR dilinde gösterilir
   web:      "www.trade.gov.tr",
   linkedin: "https://www.linkedin.com/in/recep-serhat-saru-90234428/",
   adres: {
@@ -47,20 +51,26 @@ const KART = {
   pt: {
     ad:    "Recep Serhat SARU",
     unvan: "Adido Comercial",
-    kurum: "Consulado-Geral da Türkiye em São Paulo",
+    kurum: "Consulado da Turquia em São Paulo",
     birim: "Escritório Comercial",
   },
 };
 const UI = {
   tr:{ add:"Rehbere Ekle", callOfis:"Ofis", callCep:"Cep", whatsapp:"WhatsApp", email:"E-posta", linkedin:"LinkedIn",
        qrNote:"Bu kartı açmak için kodu taratın", share:"Bağlantıyı paylaş", copied:"Bağlantı kopyalandı",
-       map:"Haritada aç", foot:"kişisel · iletişim kartı", LA:"ADRES", langs:"Dil seçimi" },
+       map:"Haritada aç", foot:"kişisel · iletişim kartı", LA:"ADRES", langs:"Dil seçimi",
+       LT:"TELEFON", LC:"CEP", LE:"E-POSTA", LO:"OFİS", LK:"KEP", ext:"Dahili", ipLbl:"IP Tel", ofisLbl:"Ofis",
+       waMsg:"Merhaba, dijital kartvizitiniz aracılığıyla ulaşıyorum." },
   en:{ add:"Add to Contacts", callOfis:"Office", callCep:"Mobile", whatsapp:"WhatsApp", email:"Email", linkedin:"LinkedIn",
        qrNote:"Scan to open this card", share:"Share link", copied:"Link copied",
-       map:"Open in maps", foot:"personal · contact card", LA:"ADDRESS", langs:"Language" },
+       map:"Open in maps", foot:"personal · contact card", LA:"ADDRESS", langs:"Language",
+       LT:"PHONE", LC:"MOBILE", LE:"EMAIL", LO:"OFFICE", ext:"Ext.", ipLbl:"IP Phone", ofisLbl:"Office",
+       waMsg:"Hello, I am reaching out via your digital business card." },
   pt:{ add:"Adicionar aos Contatos", callOfis:"Fixo", callCep:"Celular", whatsapp:"WhatsApp", email:"E-mail", linkedin:"LinkedIn",
        qrNote:"Escaneie para abrir este cartão", share:"Compartilhar link", copied:"Link copiado",
-       map:"Abrir no mapa", foot:"cartão de contato pessoal", LA:"ENDEREÇO", langs:"Idioma" },
+       map:"Abrir no mapa", foot:"cartão de contato pessoal", LA:"ENDEREÇO", langs:"Idioma",
+       LT:"TELEFONE", LC:"CELULAR", LE:"E-MAIL", LO:"ESCRITÓRIO", ext:"Ramal", ipLbl:"IP Tel", ofisLbl:"Escritório",
+       waMsg:"Olá, entro em contato por meio do seu cartão de visita digital." },
 };
 </script>
 
@@ -117,16 +127,21 @@ const UI = {
   .org b{display:block;font-size:13px;font-weight:600;color:var(--ink-strong);line-height:1.35;}
   .org span{display:block;font-size:12.5px;color:var(--gold-deep);font-weight:600;margin-top:2px;}
 
-  .addr{
-    display:flex;gap:12px;text-align:left;font-size:12px;line-height:1.4;
-    color:var(--ink-strong);border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;
+  .info{
+    text-align:left;font-size:12px;line-height:1.4;color:var(--ink-strong);
+    border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;
+    display:grid;gap:8px;
   }
-  .addr i{
-    font-style:normal;color:var(--gold-deep);min-width:58px;flex-shrink:0;font-weight:600;
+  .irow{display:flex;gap:12px;}
+  .irow i{
+    font-style:normal;color:var(--gold-deep);width:76px;flex-shrink:0;font-weight:600;
     font-size:10.5px;letter-spacing:.08em;padding-top:1px;
   }
-  .addr a{color:inherit;text-decoration:none;}
-  .addr a:hover .maplbl,.addr a:focus-visible .maplbl{text-decoration:underline;}
+  .irow > :last-child{min-width:0;overflow-wrap:anywhere;}
+  .info a{color:inherit;text-decoration:none;}
+  .info a:hover{color:var(--gold-deep);}
+  .info a:hover .maplbl,.info a:focus-visible .maplbl{text-decoration:underline;}
+  .info small{font-size:11px;color:var(--ink);}
   .maplbl{display:block;margin-top:3px;font-size:11px;font-weight:600;color:var(--gold-deep);}
 
   .btn{
@@ -202,10 +217,7 @@ const UI = {
       <span id="birim"></span>
     </div>
 
-    <div class="addr">
-      <i id="la"></i>
-      <a id="adresLink" target="_blank" rel="noopener"><span id="adres"></span><span class="maplbl" id="mapLbl"></span></a>
-    </div>
+    <div class="info" id="info"></div>
 
     <button type="button" class="btn" id="vcardBtn"><span aria-hidden="true">&#8595;</span> <span id="addLbl"></span></button>
     <div class="row" id="actions"></div>
@@ -229,6 +241,9 @@ const UI = {
   const digits = s => String(s).replace(/[^\d+]/g,"");
   const webUrl = KART.web ? "https://" + KART.web.replace(/^https?:\/\//,"") : "";
   const baseUrl = location.origin + location.pathname;
+  // Virgül = kısa bekleme; telefon dahiliyi kendisi tuşlar
+  const ofisTel = digits(KART.telefonOfis) + (KART.dahili ? "," + KART.dahili : "");
+  const waAyni = KART.whatsapp && KART.telefonCep && digits(KART.whatsapp) === digits(KART.telefonCep);
 
   // Dil önceliği: ?lang= parametresi > son seçim > tarayıcı dili > EN
   function initialLang(){
@@ -250,10 +265,7 @@ const UI = {
     $("unvan").textContent=d.unvan;
     $("kurum").textContent=d.kurum;
     $("birim").textContent=d.birim;
-    $("la").textContent=u.LA;
-    $("adres").textContent=adresMetni;
-    $("mapLbl").textContent=u.map + " ↗";
-    $("adresLink").href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent([A.sokak,A.semt,A.sehir,A.eyalet,A.posta,"Brasil"].filter(Boolean).join(", "));
+    renderInfo(u);
     $("addLbl").textContent=u.add;
     $("foot").textContent=u.foot;
     $("qrNote").textContent=u.qrNote;
@@ -262,9 +274,9 @@ const UI = {
     const w=$("webLink"); w.textContent=KART.web; w.href=webUrl; w.hidden=!KART.web;
 
     const items=[
-      KART.telefonOfis && {t:u.callOfis, href:"tel:"+digits(KART.telefonOfis)},
+      KART.telefonOfis && {t:u.callOfis, href:"tel:"+ofisTel},
       KART.telefonCep  && {t:u.callCep,  href:"tel:"+digits(KART.telefonCep)},
-      KART.whatsapp    && {t:u.whatsapp, href:"https://wa.me/"+digits(KART.whatsapp).replace("+",""), ext:true},
+      KART.whatsapp    && {t:u.whatsapp, href:"https://wa.me/"+digits(KART.whatsapp).replace("+","")+"?text="+encodeURIComponent(u.waMsg), ext:true},
       KART.eposta      && {t:u.email,    href:"mailto:"+KART.eposta},
       KART.linkedin    && {t:u.linkedin, href:KART.linkedin, ext:true},
     ].filter(Boolean);
@@ -278,6 +290,27 @@ const UI = {
 
     document.querySelectorAll("#langGroup button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.lang===lang)));
     drawQR();
+  }
+
+  // Görünür iletişim satırları (etiket + bağlantı)
+  function renderInfo(u){
+    const box=$("info"); box.innerHTML="";
+    const row=(label, href, text, note, ext)=>{
+      const r=document.createElement("div"); r.className="irow";
+      const i=document.createElement("i"); i.textContent=label; r.appendChild(i);
+      const a=document.createElement("a"); a.href=href;
+      if(ext){a.target="_blank";a.rel="noopener";}
+      const s=document.createElement("span"); s.textContent=text; a.appendChild(s);
+      if(note){ a.appendChild(document.createTextNode(" ")); const sm=document.createElement("small"); sm.textContent=note; a.appendChild(sm); }
+      r.appendChild(a); box.appendChild(r); return a;
+    };
+    const ad=row(u.LA, "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent([A.sokak,A.semt,A.sehir,A.eyalet,A.posta,"Brasil"].filter(Boolean).join(", ")), adresMetni, "", true);
+    const m=document.createElement("span"); m.className="maplbl"; m.textContent=u.map+" ↗"; ad.appendChild(m);
+    if(KART.telefonOfis) row(u.LT, "tel:"+ofisTel, KART.telefonOfis, KART.dahili ? "("+u.ext+" "+KART.dahili+")" : "");
+    if(KART.telefonCep)  row(u.LC, "tel:"+digits(KART.telefonCep), KART.telefonCep, waAyni ? "· WhatsApp" : "");
+    if(KART.eposta)      row(u.LE, "mailto:"+KART.eposta, KART.eposta);
+    if(KART.epostaOfis)  row(u.LO, "mailto:"+KART.epostaOfis, KART.epostaOfis);
+    if(KART.kep && lang==="tr") row(u.LK, "mailto:"+KART.kep, KART.kep);
   }
 
   function drawQR(){
@@ -310,7 +343,9 @@ const UI = {
   });
 
   $("vcardBtn").addEventListener("click",()=>{
-    const d=KART[lang];
+    const d=KART[lang], u=UI[lang];
+    let g=0; const item=()=>"item"+(++g)+".";   // iPhone özel etiketleri için grup öneki
+    const etiketli=(prop,label)=>{ const p=item(); return [p+prop, p+"X-ABLabel:"+label]; };
     const parts=d.ad.trim().split(/\s+/);
     const family=parts.pop(); const given=parts.join(" ");
     const esc = s => String(s).replace(/([,;\\])/g,"\\$1").replace(/\r?\n/g,"\\n");
@@ -320,9 +355,14 @@ const UI = {
       `FN:${esc(d.ad)}`,
       `ORG:${esc(d.kurum)};${esc(d.birim)}`,
       `TITLE:${esc(d.unvan)}`,
-      KART.telefonOfis && `TEL;TYPE=WORK,VOICE:${digits(KART.telefonOfis)}`,
-      KART.telefonCep  && `TEL;TYPE=CELL:${digits(KART.telefonCep)}`,
-      KART.eposta   && `EMAIL;TYPE=INTERNET,WORK:${KART.eposta}`,
+      KART.telefonOfis && `TEL;TYPE=WORK,VOICE:${ofisTel}`,
+      ...(KART.telefonCep ? (waAyni ? etiketli(`TEL;TYPE=CELL,VOICE:${digits(KART.telefonCep)}`,"WhatsApp")
+                                     : [`TEL;TYPE=CELL,VOICE:${digits(KART.telefonCep)}`]) : []),
+      ...(KART.whatsapp && !waAyni ? etiketli(`TEL;TYPE=CELL:${digits(KART.whatsapp)}`,"WhatsApp") : []),
+      ...(KART.ipTel||[]).flatMap(t=>etiketli(`TEL;TYPE=WORK:${digits(t)}`, u.ipLbl)),
+      KART.eposta   && `EMAIL;TYPE=INTERNET,WORK,PREF:${KART.eposta}`,
+      ...(KART.epostaOfis ? etiketli(`EMAIL;TYPE=INTERNET,WORK:${KART.epostaOfis}`, u.ofisLbl) : []),
+      ...(KART.kep && lang==="tr" ? etiketli(`EMAIL;TYPE=INTERNET:${KART.kep}`, "KEP") : []),
       webUrl        && `URL;TYPE=WORK:${webUrl}`,
       KART.linkedin && `URL;TYPE=LinkedIn:${KART.linkedin}`,
       `ADR;TYPE=WORK:;;${esc([A.sokak,A.semt].filter(Boolean).join(" - "))};${esc(A.sehir)};${esc(A.eyalet)};${esc(A.posta)};${esc(A.ulke)}`,
