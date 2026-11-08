@@ -26,7 +26,7 @@ const KART = {
   eposta:      "sarus@ticaret.gov.tr",
   epostaOfis:  "saopaulo@ticaret.gov.tr",
   kep:         "tb.saopauloticaretataseligi@hs03.kep.tr",   // yalnız TR dilinde gösterilir
-  web:      "www.trade.gov.tr",
+  web: { tr:"www.ticaret.gov.tr", en:"www.trade.gov.tr", pt:"www.trade.gov.tr" },  // TR sayfa / EN sayfa
   linkedin: "https://www.linkedin.com/in/recep-serhat-saru-90234428/",
   adres: {
     sokak: "Av. Chedid Jafet, 222, Bloco A, Conj. 42",
@@ -51,7 +51,7 @@ const KART = {
   pt: {
     ad:    "Recep Serhat SARU",
     unvan: "Adido Comercial",
-    kurum: "Consulado da Turquia em São Paulo",
+    kurum: "Consulado-Geral da Turquia em São Paulo",
     birim: "Escritório Comercial",
   },
 };
@@ -239,7 +239,8 @@ const UI = {
   const A = KART.adres;
   const adresMetni = [A.sokak, [A.semt, A.sehir].filter(Boolean).join(" - "), [A.posta.replace("-","\u2011"), A.eyalet].filter(Boolean).join(" ") + (A.ulke ? ", " + A.ulke : "")].filter(Boolean).join(" · ");
   const digits = s => String(s).replace(/[^\d+]/g,"");
-  const webUrl = KART.web ? "https://" + KART.web.replace(/^https?:\/\//,"") : "";
+  const webOf = l => (KART.web && KART.web[l]) || "";
+  const webUrl = l => webOf(l) ? "https://" + webOf(l).replace(/^https?:\/\//,"") : "";
   const baseUrl = location.origin + location.pathname;
   // Virgül = kısa bekleme; telefon dahiliyi kendisi tuşlar
   const ofisTel = digits(KART.telefonOfis) + (KART.dahili ? "," + KART.dahili : "");
@@ -271,7 +272,7 @@ const UI = {
     $("qrNote").textContent=u.qrNote;
     $("shareBtn").textContent=u.share;
     $("langGroup").setAttribute("aria-label", u.langs);
-    const w=$("webLink"); w.textContent=KART.web; w.href=webUrl; w.hidden=!KART.web;
+    const w=$("webLink"); w.textContent=webOf(lang); w.href=webUrl(lang); w.hidden=!webOf(lang);
 
     const items=[
       KART.telefonOfis && {t:u.callOfis, href:"tel:"+ofisTel},
@@ -363,7 +364,7 @@ const UI = {
       KART.eposta   && `EMAIL;TYPE=INTERNET,WORK,PREF:${KART.eposta}`,
       ...(KART.epostaOfis ? etiketli(`EMAIL;TYPE=INTERNET,WORK:${KART.epostaOfis}`, u.ofisLbl) : []),
       ...(KART.kep && lang==="tr" ? etiketli(`EMAIL;TYPE=INTERNET:${KART.kep}`, "KEP") : []),
-      webUrl        && `URL;TYPE=WORK:${webUrl}`,
+      webUrl(lang)  && `URL;TYPE=WORK:${webUrl(lang)}`,
       KART.linkedin && `URL;TYPE=LinkedIn:${KART.linkedin}`,
       `ADR;TYPE=WORK:;;${esc([A.sokak,A.semt].filter(Boolean).join(" - "))};${esc(A.sehir)};${esc(A.eyalet)};${esc(A.posta)};${esc(A.ulke)}`,
       "END:VCARD",
